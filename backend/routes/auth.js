@@ -1,6 +1,10 @@
 const express = require('express');
 const User = require('../models/User');
 const { body, validationResult, Result } = require('express-validator');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken')
+const JWT_SECRET = "iamaditya*p";
+
 const router = express.Router();
 
 // Create a User using: POST "api/auth/ceateuser". No login required
@@ -21,13 +25,20 @@ router.post('/createuser', [
         if (isExists) {
             return res.status(400).json({status: "User exists", msg: "The user already exists with this mail."})
         }
-    
+        
+        // Password hashing and salting
+        const salt = await bcrypt.genSalt(10);
+        const securePasswd = await bcrypt.hash(req.body.password, salt);    // hashed password. Noone can crack this.
+
+        // storing an user to DB
         let user = await User.create({
-            name: req.body.nam,
+            name: req.body.name,
             email: req.body.email,
-            password: req.body.password
+            password: securePasswd
         });
         
+        const 
+
         res.json({status: "User created!"});
         console.log(user);
     } catch (error) {
