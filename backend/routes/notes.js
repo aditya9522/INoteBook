@@ -3,7 +3,12 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.json([]);
+    notes = {
+        user: "34",
+        data: "You have no any data."
+    }
+    
+    res.json(notes);
 })
 
 module.exports = router;

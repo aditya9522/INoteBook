@@ -23,12 +23,12 @@ router.post('/createuser', [
         // checking the user exists with the same email
         let isExists = await User.findOne({email: req.body.email});
         if (isExists) {
-            return res.status(400).json({status: "User exists", msg: "The user already exists with this mail."})
+            return res.status(400).json({status: "User already exists.", msg: "The user already exists with this mail."})
         }
         
         // Password hashing and salting
         const salt = await bcrypt.genSalt(10);
-        const securePasswd = await bcrypt.hash(req.body.password, salt);    // hashed password. Noone can crack this.
+        const securePasswd = await bcrypt.hash(req.body.password, salt);    // hashed password. No-one can crack this.
 
         // storing an user to DB
         let user = await User.create({
@@ -47,7 +47,7 @@ router.post('/createuser', [
         res.json({authToken});
 
     } catch (error) {
-        res.status(500).send('Internel server error!');
+        res.status(500).send('Internal server error!');
         console.log(error.message);
     }
 });
@@ -65,7 +65,7 @@ router.post('/login', [
 
     try {
         const {email, password} = req.body;
-        const user = await User.findOne({email});   // matchs email from db and returns a object with user details
+        const user = await User.findOne({email});   // matches email from db and returns a object with user details
 
         if (!user) {
             return res.status(400).json({msg: "Please enter correct login credential."});
@@ -88,5 +88,25 @@ router.post('/login', [
         console.log(error);
     }
 });
+
+
+// Getting logged in user details :  POST "api/auth/getData".  LogIn required
+
+router.post('/getData', fetchuser, async (req, res) => {                  // fetchuser : a middleware to fetch the users data
+    try {
+
+        const data = {
+            user : {
+                id: User.id
+            }
+        }
+        const authToken = jwt.sign(data, JWT_SECRET);
+        res.json({authToken});
+    } catch (error) {
+        res.status(500).send("Internal server error!");
+        console.log(error);
+    }
+});
+
 
 module.exports = router;
