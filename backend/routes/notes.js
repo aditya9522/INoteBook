@@ -1,14 +1,18 @@
 const express = require('express');
+const Notes = require("../models/Notes");
+const fetchuser = require('../middleware/fetchuser');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    notes = {
-        user: "34",
-        data: "You have no any data."
+router.get('/fetchallnotes', fetchuser, async (req, res) => {
+    try {
+        const notes = await Notes.find(req.user.id);
+        res.json(notes);
+
+    } catch {
+        res.send("Internal server Error.");
     }
     
-    res.json(notes);
 })
 
 module.exports = router;

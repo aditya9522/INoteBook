@@ -2,8 +2,9 @@ const express = require('express');
 const User = require('../models/User');
 const { body, validationResult, Result } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 const JWT_SECRET = "iamaditya*p";
+const fetchuser = require('../middleware/fetchuser')
 
 const router = express.Router();
 
@@ -23,7 +24,7 @@ router.post('/createuser', [
         // checking the user exists with the same email
         let isExists = await User.findOne({email: req.body.email});
         if (isExists) {
-            return res.status(400).json({status: "User already exists.", msg: "The user already exists with this mail."})
+            return res.status(400).json({status: "User already exists.", msg: "The user already exists with this mail."});
         }
         
         // Password hashing and salting
@@ -36,13 +37,16 @@ router.post('/createuser', [
             email: req.body.email,
             password: securePasswd
         });
+
+        console.log("UserID: ", user);
         
         // generating Token to response for the user
         const data = {
             user : {
-                id: User.id
+                id: user.id
             }
         }
+        console.log(user.id);
         const authToken = jwt.sign(data, JWT_SECRET);
         res.json({authToken});
 
@@ -90,18 +94,14 @@ router.post('/login', [
 });
 
 
-// Getting logged in user details :  POST "api/auth/getData".  LogIn required
+// Getting logged in user details :  POST "api/auth/getUser".  LogIn required
 
-router.post('/getData', fetchuser, async (req, res) => {                  // fetchuser : a middleware to fetch the users data
+router.post('/getUser', fetchuser, async (req, res) => {                  // fetchuser : a middleware to fetch the users data
     try {
+        const userId = req.user.id;
+        const data = await User.findById(userId).select("-password");
+        res.send(data);
 
-        const data = {
-            user : {
-                id: User.id
-            }
-        }
-        const authToken = jwt.sign(data, JWT_SECRET);
-        res.json({authToken});
     } catch (error) {
         res.status(500).send("Internal server error!");
         console.log(error);
