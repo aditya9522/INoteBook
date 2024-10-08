@@ -2,10 +2,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import NoteState from './context/notes/NoteState';
 import Header from "./components/Header";
 
-import Home from "./components/Home";
+import Index from "./components/Index";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
-import Dashboard from "./components/Dashboard";
+import Home from "./components/Home";
 import AddNotes from "./components/AddNotes";
 import Profile from "./components/Profile";
 import About from './components/About';
@@ -15,10 +15,10 @@ function App() {
     <NoteState>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<ComponentWrapper showHeader={false} Component={Home} />} />
+          <Route path='/' element={<ComponentWrapper showHeader={false} Component={Index} />} />
           <Route path='/login' element={<ComponentWrapper showHeader={false} Component={Login} />} />
           <Route path='/signup' element={<ComponentWrapper showHeader={false} Component={SignUp} />} />
-          <Route path='/dashboard' element={<ComponentWrapper showHeader={true} Component={Dashboard} />} />
+          <Route path='/home' element={<ComponentWrapper showHeader={true} Component={Home} />} />
           <Route path='/addnote' element={<ComponentWrapper showHeader={true} Component={AddNotes} />} />
           <Route path='/profile' element={<ComponentWrapper showHeader={true} Component={Profile} />} />
           <Route path='/about' element={<ComponentWrapper showHeader={true} Component={About} />} />
@@ -33,7 +33,7 @@ function ComponentWrapper({ showHeader, Component }) {
   return (
     <>
       {showHeader && <Header />}
-      <div className="flex justify-center bg-gray-100">
+      <div className="mx-auto w-10/12 mt-24">
         <Component />
       </div>
     </>

@@ -9,7 +9,7 @@ function Login() {
 
     const validateCredential = () => {
         if (email === 'aditya@gmail.com' && password === 'admin') {
-            navigate('/dashboard');
+            navigate('/Home');
         } else {
             alert("Invalid Credentials!")
         }
