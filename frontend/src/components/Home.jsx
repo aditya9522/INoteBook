@@ -59,10 +59,10 @@ function Home() {
             </tr>
           </thead>
           <tbody className=''>
-            {notes.map((data, index) => {
+            {notes.map((data) => {
               return (
-                <tr className="border-b" key={index}>
-                  <td className='p-3 text-blue-500 font-medium'>{index+1}</td>
+                <tr className="border-b" key={data._id}>
+                  <td className='p-3 text-blue-500 font-medium'>1</td>
                   <td>{data.title}</td>
                   <td>{data.description}</td>
                   <td>{data.tag}</td>

@@ -1,4 +1,5 @@
 const connectToMongoDB = require('./db');
+const cors = require("cors");
 const express = require('express');
 
 connectToMongoDB();
@@ -6,6 +7,7 @@ connectToMongoDB();
 const app = express();
 const port = 5000;
 
+app.use(cors());   // for use other domain in current domain
 app.use(express.json())   // added middleware to send request in JSON
 
 // Available routes
