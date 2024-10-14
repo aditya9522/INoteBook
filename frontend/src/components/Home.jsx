@@ -1,9 +1,16 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import NoteContext from '../context/notes/NoteContext';
+import AddNote from './AddNote';
+import { Link } from 'react-router-dom';
 
 function Home() {
-  const { notes, addNote, removeNote, editNote } = useContext(NoteContext);
+  const { notes, fetchNote, addNote, removeNote } = useContext(NoteContext);
   const [newNote, setNewNote] = useState({ title: "", description: "", tag: ""});
+  console.log("User Notes: ", notes)
+
+  useEffect(() => {
+    fetchNote()
+  }, [])
 
   const handleChange = (e) => {
     setNewNote({...newNote, [ e.target.name ] : e.target.value });
@@ -23,26 +30,7 @@ function Home() {
 
       <h1 className='text-3xl font-bold mb-3 text-slate-700'>Home</h1>
       <div className="border shadow-md shadow-gray-300 px-6 py-3 rounded-lg mb-4">
-        <h1 className='text-2xl font-bold mb-3 text-blue-500'>Add Note</h1>
-        <form action="" method="" className="">
-          <div className='w-8/12 mx-auto border p-6 rounded-lg bg-gray-50'>
-            <div className="mb-3">
-              <label htmlFor="title" className='text-md font-medium text-slate-500 w-full'>Title</label>
-              <input className='mt-1 border rounded-lg w-full p-2 text-slate-600 focus:outline-blue-500' type="text" placeholder='Enter note title...' name="title" id="title" onChange={handleChange} required/>
-            </div>
-            <div className="mb-3">
-              <label htmlFor="description" className='text-md font-medium text-slate-500 w-full'>Description</label>
-              <input className='mt-1 border rounded-lg w-full p-2 text-slate-600 focus:outline-blue-500' type="text" placeholder='Enter note description...' name="description" id="description" onChange={handleChange} required/>
-            </div>
-            <div className="">
-              <label htmlFor="tag" className='text-md font-medium text-slate-500 w-full'>Tag</label>
-              <input className='mt-1 border rounded-lg w-full p-2 text-slate-600 focus:outline-blue-500' type="text" placeholder='Enter note tag...' name="tag" id="tag" onChange={handleChange} required/>
-            </div>
-          </div>
-          <div className="my-4 w-8/12 mx-auto">
-            <button type="submit" onClick={handleSubmit} className='py-2 px-4 text-white font-semibold rounded-lg bg-green-500 hover:bg-green-400'>Save</button>
-          </div>
-        </form>
+        <AddNote change={handleChange} submit={handleSubmit}/>
       </div>
 
       <div className="border shadow-md shadow-gray-300 px-6 py-3 rounded-lg mb-5">
@@ -59,16 +47,17 @@ function Home() {
             </tr>
           </thead>
           <tbody className=''>
-            {notes.map((data) => {
+            {notes.map((data ,index) => {
               return (
-                <tr className="border-b" key={data._id}>
-                  <td className='p-3 text-blue-500 font-medium'>1</td>
+                <tr className="border-b" key={index}>
+                  <td className='p-3 text-blue-500 font-medium'>{index+1}</td>
                   <td>{data.title}</td>
                   <td>{data.description}</td>
                   <td>{data.tag}</td>
                   <td>{data.date}</td>
                   <td>
                     <button className='p-1.5 text-white hover:bg-red-400 rounded-lg text-sm bg-red-500' onClick={() => handleDelete(data._id)}>Delete</button>
+                    <Link className='ml-4 p-1.5 text-white hover:bg-yellow-400 rounded-lg text-sm bg-yellow-500' to='/edit-note'>Edit</Link>
                   </td>
                 </tr>
               )

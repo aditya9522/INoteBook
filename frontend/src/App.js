@@ -6,9 +6,10 @@ import Index from "./components/Index";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Home from "./components/Home";
-import AddNotes from "./components/AddNotes";
 import Profile from "./components/Profile";
 import About from './components/About';
+import EditNote from './components/EditNote';
+
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
           <Route path='/login' element={<ComponentWrapper showHeader={false} Component={Login} />} />
           <Route path='/signup' element={<ComponentWrapper showHeader={false} Component={SignUp} />} />
           <Route path='/home' element={<ComponentWrapper showHeader={true} Component={Home} />} />
-          <Route path='/addnote' element={<ComponentWrapper showHeader={true} Component={AddNotes} />} />
+          <Route path='/edit-note' element={<ComponentWrapper showHeader={true} Component={EditNote} />} />
           <Route path='/profile' element={<ComponentWrapper showHeader={true} Component={Profile} />} />
           <Route path='/about' element={<ComponentWrapper showHeader={true} Component={About} />} />
           <Route path='/*' element={<><h1 className="flex justify-center items-center font-bold text-3xl h-screen">Not Found</h1></>} />
