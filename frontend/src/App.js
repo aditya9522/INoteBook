@@ -20,7 +20,7 @@ function App() {
           <Route path='/login' element={<ComponentWrapper showHeader={false} Component={Login} />} />
           <Route path='/signup' element={<ComponentWrapper showHeader={false} Component={SignUp} />} />
           <Route path='/home' element={<ComponentWrapper showHeader={true} Component={Home} />} />
-          <Route path='/edit-note' element={<ComponentWrapper showHeader={true} Component={EditNote} />} />
+          <Route path='/edit-note/:id' element={<ComponentWrapper showHeader={true} Component={EditNote} />} />
           <Route path='/profile' element={<ComponentWrapper showHeader={true} Component={Profile} />} />
           <Route path='/about' element={<ComponentWrapper showHeader={true} Component={About} />} />
           <Route path='/*' element={<><h1 className="flex justify-center items-center font-bold text-3xl h-screen">Not Found</h1></>} />

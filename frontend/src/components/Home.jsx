@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 function Home() {
   const { notes, fetchNote, addNote, removeNote } = useContext(NoteContext);
   const [newNote, setNewNote] = useState({ title: "", description: "", tag: ""});
-  console.log("User Notes: ", notes)
 
   useEffect(() => {
     fetchNote()
@@ -15,6 +14,7 @@ function Home() {
   const handleChange = (e) => {
     setNewNote({...newNote, [ e.target.name ] : e.target.value });
   }
+
   const handleSubmit = (e) => {
     e.preventDefault()     // to preventing the page reload
     addNote(newNote.title, newNote.description, newNote.tag);
@@ -57,7 +57,7 @@ function Home() {
                   <td>{data.date}</td>
                   <td>
                     <button className='p-1.5 text-white hover:bg-red-400 rounded-lg text-sm bg-red-500' onClick={() => handleDelete(data._id)}>Delete</button>
-                    <Link className='ml-4 p-1.5 text-white hover:bg-yellow-400 rounded-lg text-sm bg-yellow-500' to='/edit-note'>Edit</Link>
+                    <Link className='ml-4 p-1.5 text-white hover:bg-yellow-400 rounded-lg text-sm bg-yellow-500' to={`/edit-note/${data._id}`}>Edit</Link>
                   </td>
                 </tr>
               )
