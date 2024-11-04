@@ -1,12 +1,12 @@
 {
-  "name": "inotebook-backend",
+  "name": "tms-backend",
   "version": "1.0.0",
-  "description": "INoteBook - A cloud app",
+  "description": "TMS - A cloud app",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Aditya",
+  "author": "Aditya Patel",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",

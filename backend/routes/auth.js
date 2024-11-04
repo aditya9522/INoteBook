@@ -9,8 +9,8 @@ const fetchuser = require('../middleware/fetchuser')
 const router = express.Router();
 
 // Create a User using: POST "api/auth/ceateuser". No login required
-router.post('/createuser', [
-    body('name', "Enter valid name").isLength({ min: 3 }),
+router.post('/create-user', [
+    body('name', "Enter valid name").isLength({ min: 5 }),
     body('email', "Enter valid email").isEmail(),
     body('password', "Enter valid password").isLength({ min: 5 }),
 ], async (req, res) => {
@@ -18,13 +18,13 @@ router.post('/createuser', [
         // validation of data
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });    // to response bad request and msg 
+            return res.status(400).json({ success: false, mailExist: false, errors: errors.array() });    // to response bad request and msg 
         }
     
         // checking the user exists with the same email
         let isExists = await User.findOne({email: req.body.email});
         if (isExists) {
-            return res.status(400).json({status: "User already exists.", msg: "The user already exists with this mail."});
+            return res.status(400).json({status: false, mailExist: true, msg: "The user already exists with this mail."});
         }
         
         // Password hashing and salting
@@ -48,10 +48,10 @@ router.post('/createuser', [
         }
         console.log(user.id);
         const authToken = jwt.sign(data, JWT_SECRET);
-        res.json({authToken});
+        res.json({success: true, authToken});
 
     } catch (error) {
-        res.status(500).send('Internal server error!');
+        res.status(500).send({success: false, mailExist: false, error: 'Internal server error!'});
         console.log(error.message);
     }
 });
@@ -59,7 +59,7 @@ router.post('/createuser', [
 // Logging a User using: POST "api/auth/login". No login required
 router.post('/login', [
     body('email', 'Enter valid email').isEmail(),
-    body('password', 'Enter valid password').exists()
+    body('password', 'Enter valid password').isLength({ min: 5 })
 ], async (req, res) => {
 
     const errors = validationResult(req);
@@ -72,12 +72,12 @@ router.post('/login', [
         const user = await User.findOne({email});   // matches email from db and returns a object with user details
 
         if (!user) {
-            return res.status(400).json({msg: "Please enter correct login credential."});
+            return res.status(400).json({success: false, msg: "Please enter correct login credential."});
         }
         const isAuth = await bcrypt.compare(password, user.password);   // comparing password 
 
         if (!isAuth) {
-            return res.status(400).json({msg: "Please enter correct login credential."});
+            return res.status(400).json({success: false, msg: "Please enter correct login credential."});
         }
 
         const data = {
@@ -86,9 +86,10 @@ router.post('/login', [
             }
         }
         const authToken = jwt.sign(data, JWT_SECRET);
-        res.json({authToken});
+        res.json({success: true, authToken});
+
     } catch (error) {
-        res.status(500).send("Internal server error!");
+        res.status(500).send({success: false, error: "Internal server error!"});
         console.log(error);
     }
 });
